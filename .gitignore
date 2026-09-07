@@ -1,0 +1,40 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.sln
+*.slnx
+*.log
+editor-state.txt
+
+# Generated output and local editor state
+.vs/
+.idea/
+Recordings/
+*.tmp
+*.bak
+*.blend1
+*.blend2
+/BUILD_READY.txt
+/*-validation.txt
+/*-validation-final.txt
+/save-before-loop.done
+/SourceAssets/FloodPreview/
+/SourceAssets/PostProcessing/
+/SourceAssets/*-tree.json
+/SourceAssets/*-catalog.json
+
+# Download caches (imported assets and editable models are committed)
+/SourceAssets/*.zip
+/SourceAssets/Tiles002/
+/SourceAssets/Tiles040/
+
+# Local credentials
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12

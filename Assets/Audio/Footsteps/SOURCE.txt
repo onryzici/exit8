@@ -1,0 +1,6 @@
+﻿Footsteps by GboxMikeFozzy, CC0.
+Source: https://opengameart.org/content/footsteps-0
+The creator describes recording their walk through a subway.
+Six original Ogg files, downloaded 2026-09-07. No additional reverb is baked into these project copies.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Project WAV derivatives: decoded to mono 48 kHz PCM, each normalized to -4 dBFS peak using FFmpeg. Original Ogg files retained.

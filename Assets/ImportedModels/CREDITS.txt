@@ -1,0 +1,20 @@
+CURRENT SERVICE DOOR: created for this project in Blender. Source: SourceAssets/ImportedModels/Station-service-door.blend. The Ulf door described below is archived and no longer used in the current scene.
+
+Industrial Metal Door: model and textures by Ulf.
+Source: https://opengameart.org/node/6571
+License: Creative Commons Attribution-ShareAlike 3.0 Unported
+https://creativecommons.org/licenses/by-sa/3.0/
+Adaptations: Blender 5 conversion, small edge bevels, centered origin, FBX export, fitted dimensions and desaturated paint shader. Adapted door model and textures remain under CC-BY-SA 3.0. Editable adapted source: SourceAssets/ImportedModels/Door-adapted.blend; conversion: export_models.py.
+
+Modular Airduct Rectangular 01: James Ray Cock / Poly Haven.
+Source: https://polyhaven.com/a/modular_airduct_rectangular_01
+License: CC0 https://creativecommons.org/publicdomain/zero/1.0/
+Adaptations: vent_01 extracted from modular set, centered, exported as FBX, fitted to corridor. Original 4K diffuse, normal, roughness and metallic maps used.
+
+Footsteps: GboxMikeFozzy, CC0.
+https://opengameart.org/content/footsteps-0
+
+Commuter character and walking animation: Microsoft Rocketbox, Male_Adult_08 and m_walk_neutral, copyright (c) 2020 Microsoft, MIT license.
+Source: https://github.com/microsoft/Microsoft-Rocketbox
+License text: Assets/Commuter/LICENSE.md (also Build/Commuter-LICENSE.txt).
+Briefcase geometry: authored for this project; editable source SourceAssets/CommuterBriefcase.blend.
