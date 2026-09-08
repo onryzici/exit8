@@ -4,3 +4,5 @@ The creator describes recording their walk through a subway.
 Six original Ogg files, downloaded 2026-09-07. No additional reverb is baked into these project copies.
 License: https://creativecommons.org/publicdomain/zero/1.0/
 Project WAV derivatives: decoded to mono 48 kHz PCM, each normalized to -4 dBFS peak using FFmpeg. Original Ogg files retained.
+
+2026-09-08: Applied 3 ms fade-in and 14 ms fade-out to WAV derivatives to eliminate hard-cut playback clicks. Original Ogg recordings unchanged.

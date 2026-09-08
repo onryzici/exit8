@@ -7,7 +7,14 @@ public class CorridorLoopCheck:MonoBehaviour {
  void Check(bool value,string name){ok&=value;report+=name+": "+(value?"PASS":"FAIL")+"\n";}
  void CheckNumbers(){var texture=loop.numberTextures[Mathf.Clamp(loop.Progress,0,8)];Check(loop.numberSigns.All(r=>r&&r.sharedMaterial.mainTexture==texture&&r.sharedMaterial.GetTexture("_EmissionMap")==texture),"All sign faces and emission agree at "+loop.Progress);}
  IEnumerator Walk(Vector3 target){int round=loop.Round;for(int i=0;i<650;i++){var delta=target-cc.transform.position;delta.y=0;if(delta.magnitude<.09f||loop.Round!=round)yield break;cc.Move(Vector3.ClampMagnitude(delta,.09f)+Vector3.down*.04f);yield return null;}Check(false,"Reach waypoint "+target);}
- string Signature(){var ts=loop.posters.Concat(new[]{loop.vent,loop.door,loop.sign,loop.cctv}).Concat(loop.tactileSection);string s="";foreach(var g in ts)s+=g.activeSelf+" "+g.transform.localPosition+g.transform.localRotation+g.transform.localScale;foreach(var r in loop.lightTubes)s+=r.sharedMaterial.GetInstanceID();if(loop.horror)s+=loop.horror.HasVisibleChange;return s;}
+ string Signature(){var ts=loop.posters.Concat(new[]{loop.vent,loop.door,loop.sign,loop.cctv}).Concat(loop.tactileSection);string s="";foreach(var g in ts)s+=g.activeSelf+" "+g.transform.localPosition+g.transform.localRotation+g.transform.localScale;foreach(var r in loop.lightTubes)s+=MaterialIdentity(r.sharedMaterial);if(loop.horror)s+=loop.horror.HasVisibleChange;return s;}
+ static string MaterialIdentity(Material material){
+#if UNITY_6000_5_OR_NEWER
+  return material.GetEntityId().ToString();
+#else
+  return material.GetInstanceID().ToString();
+#endif
+ }
  IEnumerator Start(){yield return null;loop=FindFirstObjectByType<CorridorLoop>();loop.player.enabled=false;cc=loop.player.GetComponent<CharacterController>();yield return new WaitForSeconds(.6f);
   Check(loop.ActiveAnomaly==-1&&loop.Progress==0,"First pass is normal");Check(!loop.exitRoom.activeSelf&&!GameObject.Find("Invisible stair collision"),"No immediate stair exit");
   yield return Walk(new Vector3(0,0,-.3f));yield return Walk(new Vector3(0,0,26.3f));yield return Walk(new Vector3(6.5f,0,26.3f));Check(loop.Progress==1&&loop.EnteredFromStart,"Normal forward traversal loops and advances");
@@ -32,7 +39,7 @@ public class CorridorLoopCheck:MonoBehaviour {
   loop.SetAnomaly(-1);loop.player.Teleport(new Vector3(6.3f,.04f,26.3f),90,true);loop.CrossBoundary(false);var position=loop.player.transform.position;var rotation=loop.player.transform.rotation;
   loop.SetAnomaly(0);loop.player.Teleport(new Vector3(-6.3f,.04f,-.3f),270,true);loop.CrossBoundary(true);Check(Vector3.Distance(position,loop.player.transform.position)<.001f&&Quaternion.Angle(rotation,loop.player.transform.rotation)<.01f,"Advance and retreat arrive at identical entrance pose");
   Check(loop.sign.transform.position==signPosition&&loop.sign.transform.rotation==signRotation,"Sign location never changes between rounds");
-  loop.player.Teleport(new Vector3(0,.04f,7),0,true);loop.SetAnomaly(8);yield return new WaitForSeconds(.3f);Shot("watcher-anomaly");var initial=loop.horror.watcher.transform.position;loop.player.Teleport(loop.player.transform.position,180,true);yield return new WaitForSeconds(.6f);Check(Vector3.Distance(initial,loop.horror.watcher.transform.position)>.1f,"Watcher advances when unseen");loop.ClearAnomaly();
+  loop.player.Teleport(new Vector3(0,.04f,7),0,true);loop.SetAnomaly(8);yield return new WaitForSeconds(1.4f);Shot("watcher-anomaly");var initial=loop.horror.watcher.transform.position;loop.player.Teleport(loop.player.transform.position,180,true);yield return new WaitForSeconds(.6f);Check(Vector3.Distance(initial,loop.horror.watcher.transform.position)>.1f,"Watcher advances when unseen");loop.ClearAnomaly();
   loop.player.Teleport(new Vector3(0,.04f,9),0,true);loop.SetAnomaly(9);yield return new WaitForSeconds(.3f);Shot("ceiling-anomaly");loop.ClearAnomaly();
   loop.player.Teleport(new Vector3(0,.04f,7),0,true);loop.SetAnomaly(10);yield return new WaitForSeconds(.7f);Check(!loop.horror.water.activeSelf&&!loop.horror.entryWater.activeSelf,"Flood hidden before trigger depth");
   loop.player.Teleport(new Vector3(0,.04f,12),0,true);yield return new WaitForSeconds(.5f);Check(!loop.horror.water.activeSelf&&!loop.horror.entryWater.activeSelf,"Flood warning remains behind corner");yield return new WaitForSeconds(2.8f);var material=loop.horror.water.GetComponent<Renderer>().material;Check(loop.horror.water.activeSelf&&loop.horror.entryWater.activeSelf&&material.GetFloat("_Rise")+material.GetFloat("_Crest")>=1.8f,"Large surge emerges from corner");Shot("flood-anomaly");

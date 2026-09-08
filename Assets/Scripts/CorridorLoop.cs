@@ -21,7 +21,7 @@ public class CorridorLoop:MonoBehaviour {
  public GameObject exitRoom;
  public CorridorHorror horror;
  public StationCommuter commuter;
- public const int AnomalyCount=12;
+ public const int AnomalyCount=14;
  int normalStreak;
  [SerializeField] int progress,round;
  [SerializeField] int activeAnomaly=-1;
@@ -43,11 +43,21 @@ public class CorridorLoop:MonoBehaviour {
   else if(p.x< -6.2f&&p.z> -2.1f&&p.z<1.4f)CrossBoundary(true);
  }
  public void ResetRun(){
-  ClearAnomaly();random=new System.Random(seed==0?Environment.TickCount:seed);progress=0;round=0;previousAnomaly=-1;ExitUnlocked=false;Escaped=false;EnteredFromStart=true;started=Time.time;
+  ClearAnomaly();player.ResetBreath();random=new System.Random(seed==0?Environment.TickCount:seed);progress=0;round=0;previousAnomaly=-1;ExitUnlocked=false;Escaped=false;EnteredFromStart=true;started=Time.time;
   normalStreak=firstRoundNormal?1:0;if(exitRoom)exitRoom.SetActive(false);player.Teleport(new Vector3(-4.8f,.04f,-.3f),90,true);cooldown=Time.time+.5f;
   SetAnomaly(firstRoundNormal?-1:RollAnomaly());UpdateSigns();if(commuter)commuter.ResetRoute();Debug.Log("STATION_LOOP_STARTED");
  }
- int RollAnomaly(){if(normalStreak<3&&random.NextDouble()>anomalyChance){normalStreak++;return -1;}normalStreak=0;int next=random.Next(AnomalyCount);if(next==previousAnomaly)next=(next+1)%AnomalyCount;previousAnomaly=next;return next;}
+ int RollAnomaly(){
+  // The first encounter introduces a visible threat; later rounds mix quiet observation and pursuit.
+  if(round==1){normalStreak=0;previousAnomaly=random.Next(2)==0?12:13;return previousAnomaly;}
+  float chance=Mathf.Lerp(Mathf.Max(.62f,anomalyChance),.82f,Mathf.Clamp01(progress/6f));
+  if(normalStreak<1&&random.NextDouble()>chance){normalStreak++;return -1;}
+  normalStreak=0;
+  int[] pool={0,1,2,3,4,5,6,7,8,8,9,9,10,11,12,12,13,13};
+  int next=pool[random.Next(pool.Length)];
+  if(next==previousAnomaly)next=(next+1)%AnomalyCount;
+  previousAnomaly=next;return next;
+ }
  public void CrossBoundary(bool startBoundary){
   if(ExitUnlocked)return;
   bool turnedBack=startBoundary;
@@ -75,7 +85,7 @@ public class CorridorLoop:MonoBehaviour {
    case 7:
     foreach(var r in lightTubes){var old=r.sharedMaterial;var m=new Material(old);m.SetColor("_EmissionColor",new Color(1,.015f,.01f)*7);r.sharedMaterial=m;restore.Add(()=>{if(r)r.sharedMaterial=old;Destroy(m);});}
     if(accentLight){var color=accentLight.color;float intensity=accentLight.intensity;restore.Add(()=>{if(accentLight){accentLight.color=color;accentLight.intensity=intensity;}});accentLight.color=Color.red;accentLight.intensity=2;}break;
-   case 8:case 9:case 10:case 11:if(horror)horror.Begin(index);break;
+   case 8:case 9:case 10:case 11:case 12:case 13:if(horror)horror.Begin(index);break;
   }
  }
  public void ClearAnomaly(){if(horror)horror.Clear();for(int i=restore.Count-1;i>=0;i--)restore[i]();restore.Clear();activeAnomaly=-1;}

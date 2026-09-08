@@ -38,3 +38,9 @@ Recordings/
 !.env.example
 *.pfx
 *.p12
+
+# Local hospital experiments (metro version is the active game)
+/SourceAssets/HospitalArchive/
+/SourceAssets/Hospital_assets/
+/Screenshots/Hospital/
+/Screenshots/HospitalCustom/
